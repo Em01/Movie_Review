@@ -5,16 +5,13 @@ class ReviewsController < ApplicationController
 
   def index
     @reviews = Review.all
-    respond_with(@reviews)
   end
 
   def show
-    respond_with(@review)
   end
 
   def new
     @review = Review.new
-    respond_with(@review)
   end
 
   def edit
@@ -22,8 +19,12 @@ class ReviewsController < ApplicationController
 
   def create
     @review = Review.new(review_params)
-    @review.save
-    respond_with(@review)
+
+    if @review.save 
+      redirect_to @movie
+    else
+      render 'new'
+    end
   end
 
   def update
