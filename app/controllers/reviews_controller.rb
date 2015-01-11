@@ -1,7 +1,7 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
-  respond_to :html
 
   def index
     @reviews = Review.all
@@ -19,9 +19,10 @@ class ReviewsController < ApplicationController
 
   def create
     @review = Review.new(review_params)
+    @review.user_id = current_user.id
 
     if @review.save 
-      redirect_to @movie
+      redirect_to @review
     else
       render 'new'
     end
@@ -29,12 +30,11 @@ class ReviewsController < ApplicationController
 
   def update
     @review.update(review_params)
-    respond_with(@review)
   end
 
   def destroy
     @review.destroy
-    respond_with(@review)
+    redirect_to root_path
   end
 
   private
